@@ -7,29 +7,38 @@ import { Observable } from 'rxjs';
 })
 export class ApiService {
   public serverPath = 'http://cx.test/';
-  private Headers: HttpHeaders;
 
-  constructor(private http: HttpClient) {
-      const h = new HttpHeaders();
-      h.append('Content-Type', 'application/x-www-form-urlencoded');
-      h.append('Response-Type', 'application/json; charset=utf-8');
+  constructor(private http: HttpClient) {}
 
+  getHeaders(): HttpHeaders {
+    const h = new HttpHeaders();
+    h.append('Content-Type', 'application/x-www-form-urlencoded');
+    h.append('Response-Type', 'application/json; charset=utf-8');
+    h.append('Accept', 'application/json');
+
+    return h;
   }
 
-   get(url: string): Observable<{} | any> {
-    return this.http.get(this.serverPath + url, {headers: this.Headers});
+  get(url: string): Observable<{} | any> {
+    return this.http.get(this.serverPath + url, { headers: this.getHeaders() });
   }
 
   post(url: string, data: any) {
-    return this.http.post(this.serverPath + url, data, {headers: this.Headers});
+    return this.http.post(this.serverPath + url, data, {
+      headers: this.getHeaders()
+    });
   }
 
   put(url: string, data: any) {
-    return this.http.put(this.serverPath + url, data, {headers: this.Headers});
+    return this.http.put(this.serverPath + url, data, {
+      headers: this.getHeaders()
+    });
   }
 
   async delete(url: string) {
-    const d = await this.http.delete(this.serverPath + url, {headers: this.Headers});
+    const d = await this.http.delete(this.serverPath + url, {
+      headers: this.getHeaders()
+    });
 
     console.log(d);
 
