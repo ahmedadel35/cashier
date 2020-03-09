@@ -16,8 +16,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+// import { MatSliderModule } from '@angular/material/slider';
+// import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import {
     MomentDateAdapter,
@@ -32,12 +37,12 @@ import {
 // import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 export const MY_FORMATS = {
-    parse: { dateInput: 'LL' },
+    parse: { dateInput: 'dddd d MMMM YYYY' },
     display: {
-        dateInput: 'LL',
-        monthYearLabel: 'MMM YYYY',
-        dateA11yLabel: 'LL',
-        monthYearA11yLabel: 'MMMM YYYY'
+        dateInput: 'dddd d MMMM YYYY',
+        // monthYearLabel: 'MMM YYYY',
+        // dateA11yLabel: 'LL',
+        // monthYearA11yLabel: 'MMMM YYYY'
     }
 };
 
@@ -55,10 +60,15 @@ const modules: any[] = [
     MatInputModule,
     MatRadioModule,
     MatSelectModule,
-    MatSliderModule,
-    MatSlideToggleModule,
+    MatGridListModule,
+    // MatSliderModule,
+    // MatSlideToggleModule,
     MatListModule,
-    MatButtonModule
+    MatButtonModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonToggleModule,
     // MatNativeDateModule,
     // MatMomentDateModule,
 ];

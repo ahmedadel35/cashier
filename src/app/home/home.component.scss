@@ -1,0 +1,21 @@
+.inline {
+    // display: inline-block !important;
+}
+.inline.types a{
+    background: #3f51b5;
+    color: #fff;
+    border-bottom: 1px solid #fff;
+}
+
+.inline.brands a{
+    background: red;
+    color: #fff;
+    border-bottom: 1px solid #fff;
+}
+.dateShow {
+    font-size: 1.5em;
+}
+.heatBtn {
+    position: absolute;
+    left:0;
+}
