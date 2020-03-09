@@ -6,96 +6,134 @@
 
     <span>Right Aligned Text</span>
 </mat-toolbar>
-<div class="row">
-    <mat-nav-list class="inline types col-3 pt-0 pr-0 pl-0">
-        <a
-            mat-list-item
-            *ngFor="let i of data; let inx = index"
-            (click)="openBrand(i, inx)"
-            [class]="active === inx ? 'bg-primary' : ''"
-        >
-            <span class="label">{{ i.name }}</span>
-            <mat-icon class="icon">keyboard_arrow_left</mat-icon>
-        </a>
-    </mat-nav-list>
-    <mat-list class="inline brands col-3 pt-0 pr-0 pl-0">
-        <a mat-list-item class="bg-primary" *ngFor="let b of brandData">
-            {{ b.name }}
-            <mat-button-toggle-group
-                #heat="matButtonToggleGroup"
-                (click)="setHeat(heat.value, b)"
-                class="heatBtn"
+<div class="container-fluid">
+    <div class="row">
+        <mat-nav-list class="inline types col-3 pt-0 pr-0 pl-0">
+            <a
+                mat-list-item
+                *ngFor="let i of data; let inx = index"
+                (click)="openBrand(i, inx)"
+                [class]="active === inx ? 'bg-primary' : ''"
             >
-                <mat-button-toggle
-                    class="bg-danger text-light"
-                    value="hot"
-                    aria-label="ساخن"
+                <span class="label">{{ i.name }}</span>
+                <mat-icon class="icon">keyboard_arrow_left</mat-icon>
+            </a>
+        </mat-nav-list>
+        <mat-list class="inline brands col-3 pt-0 pr-0 pl-0">
+            <a mat-list-item class="bg-primary" *ngFor="let b of brandData">
+                {{ b.name }}
+                <mat-button-toggle-group
+                    #heat="matButtonToggleGroup"
+                    (click)="setHeat(heat.value, b)"
+                    class="heatBtn"
                 >
-                    <mat-icon>flash_on</mat-icon>
-                </mat-button-toggle>
-                <mat-button-toggle
-                    class="bg-success text-light"
-                    value="cold"
-                    aria-label="بارد"
-                >
-                    <mat-icon>ac_unit</mat-icon>
-                </mat-button-toggle>
-            </mat-button-toggle-group>
-        </a>
-    </mat-list>
-    <div class="col-6">
-        <form method="post" #newBill="ngForm" (ngSubmit)="addBill(newBill)">
-            <div class="row">
-                <div class="col-12">
-                    <mat-form-field class="dateShow">
-                        <input
-                            matInput
-                            [matDatepicker]="picker"
-                            [(ngModel)]="date"
-                            name="date"
-                        />
-                        <mat-datepicker-toggle
-                            matSuffix
-                            [for]="picker"
-                        ></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                    </mat-form-field>
+                    <mat-button-toggle
+                        class="bg-danger text-light"
+                        value="hot"
+                        aria-label="ساخن"
+                    >
+                        <mat-icon>flash_on</mat-icon>
+                    </mat-button-toggle>
+                    <mat-button-toggle
+                        class="bg-success text-light"
+                        value="cold"
+                        aria-label="بارد"
+                    >
+                        <mat-icon>ac_unit</mat-icon>
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
+            </a>
+        </mat-list>
+        <div class="col-6">
+            <form
+                method="post"
+                #newBill="ngForm"
+                (ngSubmit)="addBill(newBill.value)"
+            >
+                <div class="row">
+                    <div class="col-12">
+                        <mat-form-field class="dateShow">
+                            <input
+                                matInput
+                                [matDatepicker]="picker"
+                                [(ngModel)]="date"
+                                name="date"
+                            />
+                            <mat-datepicker-toggle
+                                matSuffix
+                                [for]="picker"
+                            ></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    <mat-form-field>
-                        <mat-label>الكمية</mat-label>
-                        <input
-                            matInput
-                            #amountEl
-                            name="amount"
-                            [(ngModel)]="amount"
-                            type="number"
-                            min="0"
-                            required
-                        />
-                    </mat-form-field>
+                <div class="row">
+                    <div class="col-6">
+                        <mat-form-field>
+                            <mat-label>الكمية</mat-label>
+                            <input
+                                matInput
+                                #amountEl
+                                name="amount"
+                                [(ngModel)]="amount"
+                                type="number"
+                                min="0"
+                                required
+                            />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-6">
+                        <mat-form-field>
+                            <mat-label>السعر</mat-label>
+                            <input
+                                matInput
+                                name="price"
+                                [(ngModel)]="price"
+                                type="number"
+                                min="0"
+                                required
+                            />
+                        </mat-form-field>
+                    </div>
                 </div>
-                <div class="col-6">
-                    <mat-form-field>
-                        <mat-label>السعر</mat-label>
-                        <input
-                            matInput
-                            name="price"
-                            [(ngModel)]="price"
-                            type="number"
-                            min="0"
-                            required
-                        />
-                    </mat-form-field>
+                <div class="row">
+                    <div class="col-12">
+                        <button mat-raised-button color="primary" type="submit">
+                            إضافة فاتورة
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <button mat-raised-button color='primary' type="submit">إضافة فاتورة</button>
-            </div>
-        </form>
+            </form>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr class="bg-primary text-light">
+                    <th>النوع</th>
+                    <th>الصنف</th>
+                    <th>الحالة</th>
+                    <th>الكمية</th>
+                    <th>السعر</th>
+                    <th>القيمة</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let b of bills">
+                    <td>{{ getTypeName(b.typeId) }}</td>
+                    <td>{{ getBrandName(b.brandId) }}</td>
+                    <td>{{ getState(b.state) }}</td>
+                    <td>{{ b.quantity }}</td>
+                    <td>{{ b.price }} جنيه</td>
+                    <td>{{ b.value }} جنيه</td>
+                </tr>
+            </tbody>
+            <tfoot class="bg-primary">
+                <tr *ngIf="sum > 0">
+                    <th colspan="5">المجموع</th>
+                    <th>{{sum}} جنيه</th>
+                </tr>
+            </tfoot>
+        </table>
     </div>
 </div>
-
-<button mat-button color="primary" (click)="log()">Click me!</button>

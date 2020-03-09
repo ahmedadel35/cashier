@@ -5,74 +5,122 @@ import { Type } from '../interfaces/type';
 import { Brand } from '../interfaces/brand';
 import { MatInput } from '@angular/material/input';
 import { NgForm } from '@angular/forms';
+import { Bill } from '../interfaces/bill';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  public data: Type[] = [];
-  public brandData: Brand[] = [];
-  public types: Type[] = [];
-  public brands: Array<Brand[]> = [];
-  public active: number;
-  public heat = '';
+    public data: Type[] = [];
+    public brandData: Brand[] = [];
+    public bills: Bill[] = [];
+    public types: Type[] = [];
+    public brands: Brand[] = [];
+    public active: number;
+    public heat = '';
+    private currentTypeId: number;
+    private currentBrandId: number;
+    public sum: number = 0;
 
-  // form props
-  public date = '';
-  public price: number;
-  public amount: number;
+    // form props
+    public date = '';
+    public price: number;
+    public amount: number;
 
-  @ViewChild('amountEl') amountEl: ElementRef;
+    @ViewChild('amountEl') amountEl: ElementRef;
 
-  constructor(private api: ApiService, private http: HttpClient) {}
+    constructor(private api: ApiService, private http: HttpClient) {}
 
-  ngOnInit(): void {
-    this.date = (new Date()).toISOString();
-    this.loadData();
-  }
+    ngOnInit(): void {
+        this.date = new Date().toISOString();
+        this.loadData();
+    }
 
-  loadData() {
-    this.api.get('all').subscribe((d: Type[]) => {
-      d = d.filter(x => Array.isArray(x.brands) && x.brands.length);
-      this.data = d;
+    loadData() {
+        this.api.get('all').subscribe((d: Type[]) => {
+            d = d.filter(x => Array.isArray(x.brands) && x.brands.length);
+            this.data = d;
+            // console.log(this.data);
 
-      // this.types = d.map(x => {
-      //   if (x.brands[0]) {
-      //       this.brands[x.brands[0].typeId] = x.brands;
-      //   }
-      //   delete x.brands;
-      //   return x;
-      // });
+            d.forEach(x => {
+                if (x.brands.length) {
+                    x.brands.map(b => this.brands.push(b));
+                }
+            });
+            // this.types = d.map(x => {
+            //   if (x.brands[0]) {
+            //       this.brands[x.brands[0].typeId] = x.brands;
+            //   }
+            //   delete x.brands;
+            //   return x;
+            // });
 
-      // this.brands.shift();
+            // this.brands.shift();
 
-      // console.log(this.types, this.brands);
-    });
-  }
+            // console.log(this.types, this.brands);
+        });
+    }
 
-  log() {
-    console.log(this.date);
-    console.log(this.heat);
-  }
+    setHeat(h, brand: Brand) {
+        // console.log(h);
+        this.heat = h;
+        this.amount = null;
+        this.amountEl.nativeElement.focus();
+        this.price = brand.price || 0;
+        this.currentBrandId = brand.id;
+    }
 
-  setHeat(h, brand: Brand) {
-    console.log(h);
-    this.heat = h;
-    this.amountEl.nativeElement.focus();
-    this.price = brand.price || 0;
-  }
+    addBill(f) {
+        const bill: Bill = {
+            typeId: this.currentTypeId,
+            brandId: this.currentBrandId,
+            state: this.heat,
+            quantity: f.amount,
+            price: f.price,
+            value: f.amount * f.price,
+            created_at: f.date
+        };
 
-  addBill(f: NgForm) {
-    console.log(f.value);
-  }
+        // console.log(bill);
+        this.bills.push(bill);
+        this.amount = null;
+        this.showSum();
+    }
 
-  openBrand(t: Type, inx: number) {
-    // console.log(t, inx, this.data[inx].brands);
-    this.active = inx;
-    this.brandData = this.data[inx].brands;
-  }
+    showSum() {
+        const bills = [...this.bills];
+        // @ts-ignore
+        const x = bills.reduce(
+            (c, a) => {
+                c.value += a.value;
+                return c;
+            },
+            { value: 0 }
+        );
 
-  
+        if (this.bills.length > 1) {
+            this.sum = x.value;
+        }
+    }
+
+    openBrand(t: Type, inx: number) {
+        this.active = inx;
+        this.brandData = this.data[inx].brands;
+        this.currentTypeId = t.id;
+        // console.log(this.bills);
+    }
+
+    getTypeName(typeId: number) {
+        return this.data.filter(x => x.id === typeId)[0].name;
+    }
+
+    getBrandName(brandId: number) {
+        return this.brands.filter(x => x.id === brandId)[0].name;
+    }
+
+    getState(state: string) {
+        return state === 'hot' ? 'ساخن' : 'بارد';
+    }
 }
