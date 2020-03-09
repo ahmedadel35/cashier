@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { HttpClient } from '@angular/common/http';
 import { Type } from '../interfaces/type';
 import { Brand } from '../interfaces/brand';
 import { MatInput } from '@angular/material/input';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -15,9 +16,15 @@ export class HomeComponent implements OnInit {
   public brandData: Brand[] = [];
   public types: Type[] = [];
   public brands: Array<Brand[]> = [];
-  public date = '';
   public active: number;
   public heat = '';
+
+  // form props
+  public date = '';
+  public price: number;
+  public amount: number;
+
+  @ViewChild('amountEl') amountEl: ElementRef;
 
   constructor(private api: ApiService, private http: HttpClient) {}
 
@@ -50,9 +57,15 @@ export class HomeComponent implements OnInit {
     console.log(this.heat);
   }
 
-  setHeat(h) {
+  setHeat(h, brand: Brand) {
     console.log(h);
     this.heat = h;
+    this.amountEl.nativeElement.focus();
+    this.price = brand.price || 0;
+  }
+
+  addBill(f: NgForm) {
+    console.log(f.value);
   }
 
   openBrand(t: Type, inx: number) {
