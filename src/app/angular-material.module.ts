@@ -22,6 +22,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTableModule } from '@angular/material/table';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
 // import { MatSliderModule } from '@angular/material/slider';
 // import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
@@ -71,6 +73,8 @@ const modules: any[] = [
     MatIconModule,
     MatButtonToggleModule,
     MatTableModule,
+    MatMenuModule,
+    MatDialogModule,
     // MatNativeDateModule,
     // MatMomentDateModule,
 ];

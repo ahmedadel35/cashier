@@ -6,6 +6,9 @@ import { Brand } from '../interfaces/brand';
 import { MatInput } from '@angular/material/input';
 import { NgForm } from '@angular/forms';
 import { Bill } from '../interfaces/bill';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { AddnewComponent } from '../components/addnew/addnew.component';
 
 @Component({
     selector: 'app-home',
@@ -17,6 +20,7 @@ export class HomeComponent implements OnInit {
     public brandData: Brand[] = [];
     public bills: Bill[] = [];
     public types: Type[] = [];
+    public allTypes: Type[] = [];
     public brands: Brand[] = [];
     public active: number;
     public heat = '';
@@ -31,7 +35,7 @@ export class HomeComponent implements OnInit {
 
     @ViewChild('amountEl') amountEl: ElementRef;
 
-    constructor(private api: ApiService, private http: HttpClient) {}
+    constructor(private api: ApiService, public dialog: MatDialog) {}
 
     ngOnInit(): void {
         this.date = new Date().toISOString();
@@ -40,26 +44,16 @@ export class HomeComponent implements OnInit {
 
     loadData() {
         this.api.get('all').subscribe((d: Type[]) => {
-            d = d.filter(x => Array.isArray(x.brands) && x.brands.length);
-            this.data = d;
-            // console.log(this.data);
+            this.allTypes = [...d];
+            this.data = d.filter(
+                x => Array.isArray(x.brands) && x.brands.length
+            );
 
             d.forEach(x => {
                 if (x.brands.length) {
                     x.brands.map(b => this.brands.push(b));
                 }
             });
-            // this.types = d.map(x => {
-            //   if (x.brands[0]) {
-            //       this.brands[x.brands[0].typeId] = x.brands;
-            //   }
-            //   delete x.brands;
-            //   return x;
-            // });
-
-            // this.brands.shift();
-
-            // console.log(this.types, this.brands);
         });
     }
 
@@ -122,5 +116,24 @@ export class HomeComponent implements OnInit {
 
     getState(state: string) {
         return state === 'hot' ? 'ساخن' : 'بارد';
+    }
+
+    addType() {
+        this.dialogOpen(false);
+    }
+
+    addBrand() {
+        this.dialogOpen(true);
+    }
+
+    dialogOpen(isBrand: boolean = false) {
+        this.dialog.open(AddnewComponent, {
+            width: '50%',
+            disableClose: true,
+            data: {
+                brand: isBrand,
+                types: this.allTypes
+            }
+        });
     }
 }

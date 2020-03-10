@@ -11,19 +11,25 @@ import { AngularMaterialModule } from './angular-material.module';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
+import { AddnewComponent } from './components/addnew/addnew.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    AddnewComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    // HttpClientJsonpModule,
     FormsModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     AngularMaterialModule
+  ],
+  entryComponents: [
+    AddnewComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
