@@ -107,7 +107,7 @@
         </div>
     </div>
     <div class="row mt-3">
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover table-bordered" [class]="{'d-none': !bills.length}">
             <thead>
                 <tr class="bg-primary text-light">
                     <th>النوع</th>
@@ -128,10 +128,10 @@
                     <td>{{ b.value }} جنيه</td>
                 </tr>
             </tbody>
-            <tfoot class="bg-primary">
+            <tfoot class="bg-primary text-light">
                 <tr *ngIf="sum > 0">
-                    <th colspan="5">المجموع</th>
-                    <th>{{sum}} جنيه</th>
+                    <th colspan="4" class="text-center">المجموع</th>
+                    <th colspan="2" class="text-center">{{sum}} جنيه</th>
                 </tr>
             </tfoot>
         </table>

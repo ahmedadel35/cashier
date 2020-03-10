@@ -79,7 +79,7 @@ export class HomeComponent implements OnInit {
             state: this.heat,
             quantity: f.amount,
             price: f.price,
-            value: f.amount * f.price,
+            value: Number((f.amount * f.price).toFixed(2)),
             created_at: f.date
         };
 
@@ -101,7 +101,7 @@ export class HomeComponent implements OnInit {
         );
 
         if (this.bills.length > 1) {
-            this.sum = x.value;
+            this.sum = Number(x.value.toFixed(2));
         }
     }
 
