@@ -16,6 +16,7 @@ import { AddnewComponent } from '../components/addnew/addnew.component';
     styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+    public loader = false;
     public data: Type[] = [];
     public brandData: Brand[] = [];
     public bills: Bill[] = [];
@@ -43,6 +44,7 @@ export class HomeComponent implements OnInit {
     }
 
     loadData() {
+        this.loader = true;
         this.api.get('all').subscribe((d: Type[]) => {
             this.allTypes = [...d];
             this.data = d.filter(
@@ -54,6 +56,8 @@ export class HomeComponent implements OnInit {
                     x.brands.map(b => this.brands.push(b));
                 }
             });
+
+            this.loader = false;
         });
     }
 
@@ -127,12 +131,24 @@ export class HomeComponent implements OnInit {
     }
 
     dialogOpen(isBrand: boolean = false) {
-        this.dialog.open(AddnewComponent, {
+        const dialogRef = this.dialog.open(AddnewComponent, {
             width: '50%',
             disableClose: true,
             data: {
                 brand: isBrand,
                 types: this.allTypes
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(r => {
+            console.log(r);
+            const hasMore = this.types.some(x => x.id === r.typeId);
+            console.log(hasMore);
+
+            // TODO add this new brand to already visible types
+            // * IF type is already has one or more brands
+            if (hasMore) {
+                // this.types[this.types.indexOf()]
             }
         });
     }
