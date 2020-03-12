@@ -89,6 +89,8 @@
                                 [matDatepicker]="picker"
                                 [(ngModel)]="date"
                                 name="date"
+                                (click)="picker.open()"
+                                readonly
                             />
                             <mat-datepicker-toggle
                                 matSuffix

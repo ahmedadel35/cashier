@@ -41,9 +41,9 @@ import {
 // import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 export const MY_FORMATS = {
-    parse: { dateInput: 'dddd d MMMM YYYY' },
+    parse: { dateInput: 'dddd D MMMM YYYY' },
     display: {
-        dateInput: 'dddd d MMMM YYYY',
+        dateInput: 'dddd D MMMM YYYY',
         // monthYearLabel: 'MMM YYYY',
         // dateA11yLabel: 'LL',
         // monthYearA11yLabel: 'MMMM YYYY'

@@ -6,6 +6,7 @@ export interface Bill {
     price: number;
     value: number;
     state?: string | 'hot' | 'cold';
-    created_at: string;
+    date?: string;
+    created_at?: string;
     updated_at?: string;
 }

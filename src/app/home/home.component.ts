@@ -1,14 +1,11 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ApiService } from '../services/api.service';
-import { HttpClient } from '@angular/common/http';
 import { Type } from '../interfaces/type';
 import { Brand } from '../interfaces/brand';
-import { MatInput } from '@angular/material/input';
-import { NgForm } from '@angular/forms';
 import { Bill } from '../interfaces/bill';
-import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AddnewComponent } from '../components/addnew/addnew.component';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-home',
@@ -30,7 +27,7 @@ export class HomeComponent implements OnInit {
     public sum: number = 0;
 
     // form props
-    public date = '';
+    public date: any;
     public price: number;
     public amount: number;
 
@@ -39,7 +36,7 @@ export class HomeComponent implements OnInit {
     constructor(private api: ApiService, public dialog: MatDialog) {}
 
     ngOnInit(): void {
-        this.date = new Date().toISOString();
+        this.date = moment();
         this.loadData();
     }
 
@@ -78,7 +75,7 @@ export class HomeComponent implements OnInit {
             quantity: f.amount,
             price: f.price,
             value: Number((f.amount * f.price).toFixed(2)),
-            created_at: f.date
+            date: f.date
         };
 
         // console.log(bill);
@@ -147,7 +144,7 @@ export class HomeComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((r: Brand) => {
             this.loader = true;
-            console.log(r);
+            // console.log(r);
             const hasMore = this.data.some(x => x.id === r.typeId);
 
             const t = this.allTypes.filter(x => x.id === r.typeId);
