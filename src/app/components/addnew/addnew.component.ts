@@ -14,9 +14,12 @@ export class AddnewComponent implements OnInit {
     public result: any;
     public isBrand = false;
     public types: Type[] = [];
+    public isLoading = false;
+
+    // form props
     public typeId: number;
     public name: string;
-    public isLoading = false;
+    public price;
 
     @ViewChild('addTypeOrBrand') form: NgForm;
 
@@ -29,10 +32,7 @@ export class AddnewComponent implements OnInit {
         this.types = this.data.types;
     }
 
-    ngOnInit(): void {
-        // console.log(this.dialogRef.id);
-        // console.log(this.data);
-    }
+    ngOnInit(): void {}
 
     save(f): void {
         if (this.isLoading || !f.name || !f.name.length) {
@@ -42,11 +42,13 @@ export class AddnewComponent implements OnInit {
         this.isLoading = true;
         const obj = {
             name: f.name,
-            typeId: null
+            typeId: null,
+            price: null,
         };
 
         if (this.isBrand) {
             obj.typeId = f.typeId;
+            obj.price = f.price || 0;
 
             this.api.post(`type/${f.typeId}`, obj).subscribe(
                 r => {
@@ -55,6 +57,22 @@ export class AddnewComponent implements OnInit {
                     this.result = r;
                     this.typeId = null;
                     this.name = '';
+                    this.price = null;
+                    this.close();
+                },
+                err => {
+                    console.log(err);
+                    this.isLoading = false;
+                }
+            );
+        } else {
+            this.api.post('type', obj).subscribe(
+                r => {
+                    this.isLoading = false;
+                    // console.log(r);
+                    this.result = r;
+                    this.name = '';
+                    this.close();
                 },
                 err => {
                     console.log(err);
@@ -62,22 +80,6 @@ export class AddnewComponent implements OnInit {
                 }
             );
         }
-
-        // console.log(obj);
-
-        this.api.post('type', obj).subscribe(
-            r => {
-                this.isLoading = false;
-                // console.log(r);
-                this.result = r;
-                this.name = '';
-                this.close();
-            },
-            err => {
-                console.log(err);
-                this.isLoading = false;
-            }
-        );
     }
 
     close() {

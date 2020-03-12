@@ -31,6 +31,21 @@
             </mat-form-field>
         </div>
     </div>
+    <div class="row" *ngIf="isBrand">
+            <div class="col-12">
+                <mat-form-field>
+                    <mat-label>السعر</mat-label>
+                    <input
+                        matInput
+                        name="price"
+                        [(ngModel)]="price"
+                        type="number"
+                        min="0"
+                        [readonly]="isLoading"
+                    />
+                </mat-form-field>
+            </div>
+        </div>
     <div class="row">
         <div class="col-6">
             <button mat-flat-button color="primary" type="submit" [disabled]="isLoading">
@@ -39,7 +54,7 @@
                     role="status"
                     *ngIf="isLoading"
                 >
-                    <span class="sr-only">Loading...</span>
+                    <span class="sr-only">يتم التحميل...</span>
                 </div>
                 <span class="pr-2">حفظ</span>
             </button>
