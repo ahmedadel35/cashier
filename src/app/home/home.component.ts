@@ -131,6 +131,11 @@ export class HomeComponent implements OnInit {
     }
 
     dialogOpen(isBrand: boolean = false) {
+        // reset type list
+        this.brandData = [];
+        this.active = null;
+        this.currentTypeId = null;
+
         const dialogRef = this.dialog.open(AddnewComponent, {
             width: '50%',
             disableClose: true,
@@ -140,16 +145,39 @@ export class HomeComponent implements OnInit {
             }
         });
 
-        dialogRef.afterClosed().subscribe(r => {
+        dialogRef.afterClosed().subscribe((r: Brand) => {
+            this.loader = true;
             console.log(r);
-            const hasMore = this.types.some(x => x.id === r.typeId);
-            console.log(hasMore);
+            const hasMore = this.data.some(x => x.id === r.typeId);
+
+            const t = this.allTypes.filter(x => x.id === r.typeId);
+
+            if (!t || !t.length) {
+                this.loader = false;
+                return;
+            }
 
             // TODO add this new brand to already visible types
             // * IF type is already has one or more brands
             if (hasMore) {
-                // this.types[this.types.indexOf()]
+                this.data.map(x => {
+                    if (x.id === r.typeId) {
+                        x.brands.push(r);
+                        this.brands.push(r);
+                    }
+                    return x;
+                });
+            } else {
+                // this the first brand for this type
+                const type: Type = t[0];
+
+                type.brands.push(r);
+                this.types.push(type);
+                this.brands.push(r);
+                this.data.push(type);
             }
+
+            this.loader = false;
         });
     }
 }
