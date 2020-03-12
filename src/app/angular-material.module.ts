@@ -7,7 +7,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 //
 
 // import { MatAutocompleteModule } from '@angular/material/autocomplete';
-// import { MatListModule } from '@angular/material/list';
+import { MatListModule } from '@angular/material/list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 // import { MatNativeDateModule } from '@angular/material/core';
@@ -67,7 +67,7 @@ const modules: any[] = [
     // MatGridListModule,
     // MatSliderModule,
     // MatSlideToggleModule,
-    // MatListModule,
+    MatListModule,
     MatButtonModule,
     // MatSidenavModule,
     MatToolbarModule,
