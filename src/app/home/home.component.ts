@@ -24,7 +24,11 @@ export class HomeComponent implements OnInit {
     public heat = '';
     private currentTypeId: number;
     private currentBrandId: number;
-    public sum: number = 0;
+    public sum: {
+        value?: number;
+        amount?: number;
+        price?: number;
+    } = {};
     public edit = false;
     public editBill = false;
     public activeBillIndex?: number = null;
@@ -87,7 +91,7 @@ export class HomeComponent implements OnInit {
             state: this.heat,
             quantity: f.amount,
             price: f.price,
-            value: Number((f.amount * f.price).toFixed(2)),
+            value: Number((f.amount * f.price).toFixed(2))
             // date: f.date
         };
 
@@ -97,18 +101,14 @@ export class HomeComponent implements OnInit {
     }
 
     showSum() {
-        const bills = [...this.bills];
-        // @ts-ignore
-        const x = bills.reduce(
-            (c, a) => {
-                c.value += a.value;
-                return c;
-            },
-            { value: 0 }
-        );
+        this.sum.amount = this.sum.price = this.sum.value = 0;
 
         if (this.bills.length > 1) {
-            this.sum = Number(x.value.toFixed(2));
+            this.bills.forEach((x: Bill) => {
+                this.sum.amount += x.quantity;
+                this.sum.price += x.price;
+                this.sum.value += x.value;
+            });
         }
     }
 
