@@ -38,25 +38,9 @@ export class ApiService {
         });
     }
 
-    async delete(url: string) {
-        const d = await this.http.delete(this.serverPath + url, {
+    delete(url: string) {
+        return this.http.delete(this.serverPath + url, {
             headers: this.getHeaders()
         });
-
-        console.log(d);
-
-        d.subscribe(
-            (x: { deleted: boolean }) => {
-                if (x && x.deleted) {
-                    return true;
-                } else {
-                    return false;
-                }
-            },
-            err => {
-                console.log(err);
-                return false;
-            }
-        );
     }
 }

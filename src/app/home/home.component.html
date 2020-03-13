@@ -18,7 +18,7 @@
         </button>
 
         <a mat-button router-link="/repo">
-            <mat-icon>report</mat-icon>
+            <mat-icon>assignment</mat-icon>
             <span>تقارير</span>
         </a>
     </div>
@@ -61,6 +61,14 @@
                 >
                     <mat-icon>edit</mat-icon>
                 </button>
+                <button
+                        mat-mini-fab
+                        class="bg-danger mr-2"
+                        (click)="removeType(i)"
+                        *ngIf="edit"
+                    >
+                        <mat-icon>highlight_off</mat-icon>
+                    </button>
             </a>
         </mat-nav-list>
         <mat-list class="inline brands col-3 pt-0 pr-0 pl-0">
@@ -72,7 +80,7 @@
                     class="heatBtn"
                 >
                     <mat-button-toggle
-                        class="bg-danger text-light"
+                        class="bg-warning text-light"
                         value="hot"
                         aria-label="ساخن"
                     >
@@ -86,11 +94,18 @@
                         <mat-icon>ac_unit</mat-icon>
                     </mat-button-toggle>
                     <mat-button-toggle
-                        class="bg-warning text-light"
+                        class="bg-info text-light"
                         (click)="addBrand(b)"
                         *ngIf="edit"
                     >
                         <mat-icon>edit</mat-icon>
+                    </mat-button-toggle>
+                    <mat-button-toggle
+                        class="bg-danger text-light"
+                        (click)="removeBrand(b)"
+                        *ngIf="edit"
+                    >
+                        <mat-icon>highlight_off</mat-icon>
                     </mat-button-toggle>
                 </mat-button-toggle-group>
             </a>

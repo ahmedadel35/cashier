@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
     public data: Type[] = [];
     public brandData: Brand[] = [];
     public bills: Bill[] = [];
-    public types: Type[] = [];
+    // public types: Type[] = [];
     public allTypes: Type[] = [];
     public brands: Brand[] = [];
     public active: number;
@@ -52,17 +52,23 @@ export class HomeComponent implements OnInit {
     }
 
     doCalc(d: Type[] = this.allTypes) {
+        this.brandData = [];
+        this.active = null;
+
         this.data = d.filter(x => Array.isArray(x.brands) && x.brands.length);
 
         d.forEach(x => {
-            if (x.brands.length) {
+            if (x.brands && x.brands.length) {
                 x.brands.map(b => this.brands.push(b));
             }
         });
     }
 
     setHeat(h, brand: Brand) {
-        // console.log(h);
+        if (this.edit) {
+            return;
+        }
+
         this.heat = h;
         this.amount = null;
         this.amountEl.nativeElement.focus();
@@ -81,7 +87,6 @@ export class HomeComponent implements OnInit {
             date: f.date
         };
 
-        // console.log(bill);
         this.bills.push(bill);
         this.amount = null;
         this.showSum();
@@ -107,7 +112,6 @@ export class HomeComponent implements OnInit {
         this.active = inx;
         this.brandData = this.data[inx].brands;
         this.currentTypeId = t.id;
-        // console.log(this.bills);
     }
 
     getTypeName(typeId: number) {
@@ -130,35 +134,35 @@ export class HomeComponent implements OnInit {
         this.dialogOpen(true, isEdit);
     }
 
-    addNewBrand(r: Brand) {
-        const hasMore = this.data.some(x => x.id === r.typeId);
+    removeBrand(b: Brand) {
+        this.loader = true;
 
-        const t = this.allTypes.filter(x => x.id === r.typeId);
+        this.api.delete(`brand/${b.id}`).subscribe(
+            (x: { delete: boolean }) => {
+                if (x && x.delete) {
+                    // remove from list
+                    this.allTypes.map(c => {
+                        if (c.id === b.typeId) {
+                            c.brands = c.brands.filter(r => r.id !== b.id);
+                        }
+                        return c;
+                    });
 
-        if (!t || !t.length) {
-            this.loader = false;
-            return;
-        }
-
-        // IF type is already has one or more brands
-        if (hasMore) {
-            this.data.map(x => {
-                if (x.id === r.typeId) {
-                    x.brands.push(r);
-                    this.brands.push(r);
+                    this.doCalc();
+                    this.loader = false;
+                } else {
+                    this.loader = false;
+                    return false;
                 }
-                return x;
-            });
-        } else {
-            // this the first brand for this type
-            const type: Type = t[0];
-
-            type.brands.push(r);
-            this.types.push(type);
-            this.brands.push(r);
-            this.data.push(type);
-        }
+            },
+            err => {
+                this.loader = false;
+                console.log(err);
+            }
+        );
     }
+
+    removeType(i: Type) {}
 
     dialogOpen(isBrand: boolean = false, isEdit?: Type | Brand) {
         // reset type list
@@ -176,48 +180,81 @@ export class HomeComponent implements OnInit {
             }
         });
 
-        dialogRef.afterClosed().subscribe((r: Brand) => {
-            this.loader = true;
-            // console.log(r);
-            // check if it was an update dialog
-            if (r.updated_at === 'true') {
-                // check if this is a brand
-                if (r.typeId) {
-                    this.brands.map(x => {
-                        if (x.id === r.id) {
-                            x.typeId = r.typeId;
-                            x.name = r.name;
-                            x.price = r.price;
-                        }
-                        return x;
-                    });
-                    if (!isNaN(Number(r.created_at))) {
-                        this.addNewBrand(r);
+        dialogRef
+            .afterClosed()
+            .subscribe(
+                (r: {
+                    obj?: Type | Brand;
+                    isBrand?: boolean;
+                    updated?: boolean;
+                    oldTypeId?: number;
+                    changedTypeId?: boolean;
+                }) => {
+                    this.loader = true;
 
-                        // remove brand from old type
-                        this.data.map(x => {
-                            if (x.id === Number(r.created_at)) {
-                                x.brands = x.brands.filter(
-                                    b => b.id !== r.id
-                                );
-                            }
-                            return x;
-                        });
+                    // check if it was an update dialog
+                    if (r.updated) {
+                        // check if this is a brand
+                        if (r.isBrand) {
+                            const obj: Brand = r.obj as Brand;
+
+                            this.allTypes.map(x => {
+                                // check if user changed brand type
+                                if (r.changedTypeId) {
+                                    if (x.id === r.oldTypeId) {
+                                        // remove from old type brands
+                                        x.brands = x.brands.filter(
+                                            b => b.id !== x.id
+                                        );
+                                    } else if (x.id === obj.typeId) {
+                                        // add to new type brands
+                                        x.brands.push(obj);
+                                    }
+                                } else {
+                                    // if user did not change brand type
+                                    if (x.id === obj.typeId) {
+                                        // update current brand
+                                        x.brands.map(b => {
+                                            if (b.id === obj.id) {
+                                                b.name = obj.name;
+                                                b.price = obj.price;
+                                                b.updated_at = obj.updated_at;
+                                            }
+                                        });
+                                    }
+                                }
+                                return x;
+                            });
+                        } else {
+                            // if obj is type
+                            const obj: Type = r.obj;
+
+                            this.allTypes.map(t => {
+                                if (t.id === obj.id) {
+                                    t.name = obj.name;
+                                }
+                            });
+                        }
+                    } else {
+                        // if user added new brand
+                        if (r.isBrand) {
+                            const obj: Brand = r.obj as Brand;
+                            this.allTypes.map(t => {
+                                if (t.id === obj.typeId) {
+                                    t.brands.push(obj);
+                                }
+                                return t;
+                            });
+                        } else {
+                            // user added new type
+                            (r.obj as Type).brands = [];
+                            this.allTypes.push(r.obj);
+                        }
                     }
-                    this.doCalc();
-                } else {
-                    this.data.map(x => {
-                        if (x.id === r.id) {
-                            x.name = r.name;
-                        }
-                        return x;
-                    });
-                }
-            } else {
-                this.addNewBrand(r);
-            }
 
-            this.loader = false;
-        });
+                    this.doCalc();
+                    this.loader = false;
+                }
+            );
     }
 }

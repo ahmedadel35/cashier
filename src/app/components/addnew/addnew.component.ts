@@ -11,13 +11,18 @@ import { NgForm } from '@angular/forms';
     styleUrls: ['./addnew.component.scss']
 })
 export class AddnewComponent implements OnInit {
-    public result: Type | Brand;
+    public result: {
+        obj?: Type | Brand;
+        isBrand?: boolean;
+        updated?: boolean;
+        oldTypeId?: number;
+        changedTypeId?: boolean;
+    } = {};
     public isBrand = false;
     public types: Type[] = [];
     public isLoading = false;
     public isEdit = false;
     public obj: Type | Brand;
-    private oldTypeId: number; // will hold the original typeid
 
     // form props
     public typeId: number;
@@ -34,13 +39,16 @@ export class AddnewComponent implements OnInit {
         const d = this.data;
         this.isBrand = d.brand;
         this.types = d.types;
+
+        this.result.isBrand = d.brand;
+        this.result.updated = d.edit;
         if (d.edit) {
             this.isEdit = true;
             this.obj = d.edit;
-            const ed = d.edit;
+            const ed: Brand = d.edit;
             if (this.isBrand) {
                 this.typeId = ed.typeId;
-                this.oldTypeId = ed.typeId;
+                this.result.oldTypeId = ed.typeId;
                 this.price = ed.price;
             }
             this.name = ed.name;
@@ -74,7 +82,7 @@ export class AddnewComponent implements OnInit {
                 (r: Brand) => {
                     // console.log(r);
                     this.isLoading = false;
-                    this.result = r;
+                    this.result.obj = r;
                     this.typeId = null;
                     this.name = '';
                     this.price = null;
@@ -91,7 +99,7 @@ export class AddnewComponent implements OnInit {
                 (r: Type) => {
                     this.isLoading = false;
                     // console.log(r);
-                    this.result = r;
+                    this.result.obj = r;
                     this.name = '';
                     this.close();
                 },
@@ -104,12 +112,8 @@ export class AddnewComponent implements OnInit {
     }
 
     close() {
-        if (this.isEdit) {
-            this.result.updated_at = 'true';
-            if (this.isBrand && this.oldTypeId !== this.typeId) {
-                this.result.created_at = `${this.oldTypeId}`;
-            }
-        }
+        this.result.changedTypeId =
+            this.result.oldTypeId !== (this.result.obj as Brand).typeId;
         this.dialogRef.close(this.result);
     }
 }
