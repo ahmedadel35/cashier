@@ -62,13 +62,13 @@
                     <mat-icon>edit</mat-icon>
                 </button>
                 <button
-                        mat-mini-fab
-                        class="bg-danger mr-2"
-                        (click)="removeType(i)"
-                        *ngIf="edit"
-                    >
-                        <mat-icon>highlight_off</mat-icon>
-                    </button>
+                    mat-mini-fab
+                    class="bg-danger mr-2"
+                    (click)="removeType(i)"
+                    *ngIf="edit"
+                >
+                    <mat-icon>highlight_off</mat-icon>
+                </button>
             </a>
         </mat-nav-list>
         <mat-list class="inline brands col-3 pt-0 pr-0 pl-0">
@@ -87,14 +87,14 @@
                         <mat-icon>flash_on</mat-icon>
                     </mat-button-toggle>
                     <mat-button-toggle
-                        class="bg-success text-light"
+                        class="bg-info text-light"
                         value="cold"
                         aria-label="بارد"
                     >
                         <mat-icon>ac_unit</mat-icon>
                     </mat-button-toggle>
                     <mat-button-toggle
-                        class="bg-info text-light"
+                        class="bg-primary text-light"
                         (click)="addBrand(b)"
                         *ngIf="edit"
                     >
@@ -187,22 +187,99 @@
                     <th>الكمية</th>
                     <th>السعر</th>
                     <th>القيمة</th>
+                    <th>____</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let b of bills">
+                <tr *ngFor="let b of bills; let binx = index">
                     <td>{{ getTypeName(b.typeId) }}</td>
                     <td>{{ getBrandName(b.brandId) }}</td>
-                    <td>{{ getState(b.state) }}</td>
-                    <td>{{ b.quantity }}</td>
-                    <td>{{ b.price }} جنيه</td>
+                    <td>
+                        <span *ngIf="!editBill || activeBillIndex !== binx">{{ getState(b.state) }}</span>
+                        <mat-button-toggle-group
+                            *ngIf="editBill && activeBillIndex === binx"
+                            #heatt="matButtonToggleGroup"
+                            (click)="updateHeat(heatt.value)"
+                            [value]="b.state"
+                        >
+                            <mat-button-toggle
+                                class="bg-warning text-light ml-2"
+                                value="hot"
+                                aria-label="ساخن"
+                            >
+                                <mat-icon>flash_on</mat-icon>
+                            </mat-button-toggle>
+                            <mat-button-toggle
+                                class="bg-info text-light"
+                                value="cold"
+                                aria-label="بارد"
+                            >
+                                <mat-icon>ac_unit</mat-icon>
+                            </mat-button-toggle>
+                        </mat-button-toggle-group>
+                    </td>
+                    <td>
+                        <span *ngIf="!editBill || activeBillIndex !== binx">{{ b.quantity }}</span>
+                        <span *ngIf="editBill && activeBillIndex === binx">
+                            <mat-form-field>
+                                <mat-label>الكمية</mat-label>
+                                <input
+                                    matInput
+                                    name="amount"
+                                    [(ngModel)]="amount"
+                                    type="number"
+                                    min="0"
+                                    [value]="b.quantity"
+                                    required
+                                />
+                            </mat-form-field>
+                        </span>
+                    </td>
+                    <td>
+                        <span *ngIf="!editBill || activeBillIndex !== binx">{{ b.price }} جنيه</span>
+                        <span *ngIf="editBill && activeBillIndex === binx">
+                            <mat-form-field>
+                                <mat-label>السعر</mat-label>
+                                <input
+                                    matInput
+                                    name="price"
+                                    [(ngModel)]="price"
+                                    type="number"
+                                    min="0"
+                                    [value]="b.price"
+                                    required
+                                />
+                            </mat-form-field>
+                        </span>
+                    </td>
                     <td>{{ b.value }} جنيه</td>
+                    <td>
+                        <button
+                            mat-raised-button
+                            class="bg-success text-light ml-2"
+                            *ngIf="editBill && activeBillIndex === binx"
+                            (click)="updateBill(b, binx)"
+                        >
+                            <mat-icon>check</mat-icon>
+                        </button>
+                        <button
+                            mat-raised-button
+                            class="bg-info text-light"
+                            *ngIf="!editBill || activeBillIndex !== binx"
+                            (click)="editOneBill(b, binx)"
+                        >
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-raised-button color="warn" class="mr-2">
+                            <mat-icon>highlight_off</mat-icon>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
             <tfoot class="bg-primary text-light">
                 <tr *ngIf="sum > 0">
                     <th colspan="4" class="text-center">المجموع</th>
-                    <th colspan="2" class="text-center">{{ sum }} جنيه</th>
+                    <th colspan="3" class="text-center">{{ sum }} جنيه</th>
                 </tr>
             </tfoot>
         </table>

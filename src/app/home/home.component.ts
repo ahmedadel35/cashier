@@ -26,6 +26,8 @@ export class HomeComponent implements OnInit {
     private currentBrandId: number;
     public sum: number = 0;
     public edit = false;
+    public editBill = false;
+    public activeBillIndex?: number = null;
 
     // form props
     public date: any;
@@ -273,5 +275,32 @@ export class HomeComponent implements OnInit {
                     this.loader = false;
                 }
             );
+    }
+
+    editOneBill(b: Bill, inx: number) {
+        this.editBill = true;
+        this.activeBillIndex = inx;
+        this.amount = b.quantity;
+        this.heat = b.state;
+        this.price = b.price;
+    }
+
+    updateBill(b: Bill, inx: number) {
+        this.editBill = false;
+        b.state = this.heat;
+        b.quantity = this.amount;
+        b.price = this.price;
+        b.value = Number((this.amount * this.price).toFixed(2));
+
+        this.bills[inx] = b;
+        this.showSum();
+
+        // reset globals
+        this.heat = null;
+        this.amount = this.price = null;
+    }
+
+    updateHeat(h: string) {
+        this.heat = h;
     }
 }
