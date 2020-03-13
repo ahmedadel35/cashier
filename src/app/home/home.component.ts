@@ -162,7 +162,24 @@ export class HomeComponent implements OnInit {
         );
     }
 
-    removeType(i: Type) {}
+    removeType(t: Type) {
+        this.loader = true;
+
+        this.api.delete(`type/${t.id}`).subscribe(
+            (x: { delete: boolean }) => {
+                if (x && x.delete) {
+                    this.allTypes = this.allTypes.filter(r => r.id !== t.id);
+
+                    this.doCalc();
+                }
+                this.loader = false;
+            },
+            err => {
+                this.loader = false;
+                console.log(err);
+            }
+        );
+    }
 
     dialogOpen(isBrand: boolean = false, isEdit?: Type | Brand) {
         // reset type list
