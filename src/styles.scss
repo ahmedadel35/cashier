@@ -11,7 +11,7 @@ body {
 }
 body {
     margin: 0;
-    font-family: 'Cairo', 'Roboto', 'Helvetica Neue', Roboto, sans-serif;
+    font-family: 'Cairo', 'Roboto', 'Helvetica Neue', Roboto, sans-serif !important;
 }
 .loader {
     z-index: 999;
@@ -19,4 +19,7 @@ body {
     left: 50%;
     top: 50%;
     border-radius: .5rem !important;
+}
+.fillRemaning {
+    flex: 1 1 auto;
 }
