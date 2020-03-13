@@ -12,12 +12,14 @@ import { AngularMaterialModule } from './angular-material.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { AddnewComponent } from './components/addnew/addnew.component';
+import { ReportComponent } from './report/report.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    AddnewComponent
+    AddnewComponent,
+    ReportComponent
   ],
   imports: [
     BrowserModule,

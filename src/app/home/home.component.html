@@ -8,17 +8,17 @@
         </mat-menu>
 
         <button mat-button [matMenuTriggerFor]="appMenu">
-            <mat-icon>add</mat-icon>
+            <mat-icon class="ml-1">add</mat-icon>
             <span>إضافة</span>
         </button>
 
         <button mat-button (click)="edit = !edit">
-            <mat-icon>edit</mat-icon>
+            <mat-icon class="ml-1">edit</mat-icon>
             <span>تعديل</span>
         </button>
 
-        <a mat-button router-link="/repo">
-            <mat-icon>assignment</mat-icon>
+        <a mat-button routerLink="/report" class="text-light">
+            <mat-icon class="ml-1">assignment</mat-icon>
             <span>تقارير</span>
         </a>
     </div>
