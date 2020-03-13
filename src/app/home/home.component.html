@@ -75,8 +75,8 @@
             <a mat-list-item class="bg-primary" *ngFor="let b of brandData">
                 {{ b.name }}
                 <mat-button-toggle-group
-                    #heat="matButtonToggleGroup"
-                    (click)="setHeat(heat.value, b)"
+                    #heatr="matButtonToggleGroup"
+                    (click)="setHeat(heatr.value, b)"
                     class="heatBtn"
                 >
                     <mat-button-toggle
@@ -172,9 +172,39 @@
                     </div>
                 </div>
             </form>
+            <div class="alert alert-success text-center mt-5 w-75 mx-auto" *ngIf="showAlert">
+                <strong>تم الحفظ بنجاح</strong>
+            </div>
         </div>
     </div>
     <div class="row mt-3">
+        <div class="mb-2 text-center w-75 mx-auto" [hidden]="!bills.length">
+            <button
+                mat-flat-button
+                color="primary"
+                class="m-2 font-weight-bolder"
+                (click)="saveBill()"
+                [disabled]="isSavingBill"
+            >
+                <div
+                    class="spinner-border spinner-border-sm text-dark ml-2"
+                    role="status"
+                    *ngIf="isSavingBill"
+                >
+                    <span class="sr-only">يتم التحميل...</span>
+                </div>
+                <mat-icon class="ml-2">save</mat-icon>
+                <span>حفظ وطباعة الفاتورة</span>
+            </button>
+            <button
+                mat-flat-button
+                class="bg-danger text-light m-2 font-weight-bolder"
+                (click)="bills = []"
+            >
+                <mat-icon class="ml-2">highlight_off</mat-icon>
+                <span>حذف الفاتورة</span>
+            </button>
+        </div>
         <table
             class="table table-striped table-hover table-bordered"
             [class]="{ 'd-none': !bills.length }"
@@ -195,7 +225,9 @@
                     <td>{{ getTypeName(b.typeId) }}</td>
                     <td>{{ getBrandName(b.brandId) }}</td>
                     <td>
-                        <span *ngIf="!editBill || activeBillIndex !== binx">{{ getState(b.state) }}</span>
+                        <span *ngIf="!editBill || activeBillIndex !== binx">{{
+                            getState(b.state)
+                        }}</span>
                         <mat-button-toggle-group
                             *ngIf="editBill && activeBillIndex === binx"
                             #heatt="matButtonToggleGroup"
@@ -219,7 +251,9 @@
                         </mat-button-toggle-group>
                     </td>
                     <td>
-                        <span *ngIf="!editBill || activeBillIndex !== binx">{{ b.quantity }}</span>
+                        <span *ngIf="!editBill || activeBillIndex !== binx">{{
+                            b.quantity
+                        }}</span>
                         <span *ngIf="editBill && activeBillIndex === binx">
                             <mat-form-field>
                                 <mat-label>الكمية</mat-label>
@@ -236,7 +270,9 @@
                         </span>
                     </td>
                     <td>
-                        <span *ngIf="!editBill || activeBillIndex !== binx">{{ b.price }} جنيه</span>
+                        <span *ngIf="!editBill || activeBillIndex !== binx"
+                            >{{ b.price }} جنيه</span
+                        >
                         <span *ngIf="editBill && activeBillIndex === binx">
                             <mat-form-field>
                                 <mat-label>السعر</mat-label>

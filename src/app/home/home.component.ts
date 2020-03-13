@@ -28,6 +28,8 @@ export class HomeComponent implements OnInit {
     public edit = false;
     public editBill = false;
     public activeBillIndex?: number = null;
+    public isSavingBill = false;
+    public showAlert = false;
 
     // form props
     public date: any;
@@ -86,7 +88,7 @@ export class HomeComponent implements OnInit {
             quantity: f.amount,
             price: f.price,
             value: Number((f.amount * f.price).toFixed(2)),
-            date: f.date
+            // date: f.date
         };
 
         this.bills.push(bill);
@@ -302,5 +304,29 @@ export class HomeComponent implements OnInit {
 
     updateHeat(h: string) {
         this.heat = h;
+    }
+
+    saveBill() {
+        this.isSavingBill = true;
+
+        this.api.post('bill', this.bills).subscribe(
+            (r: { saved: boolean }) => {
+                if (r && r.saved) {
+                    this.bills = [];
+
+                    // show alert that saving was success
+                    this.showAlert = true;
+
+                    setTimeout(() => {
+                        this.showAlert = false;
+                    }, 2500);
+                }
+                this.isSavingBill = false;
+            },
+            err => {
+                console.log(err);
+                this.isSavingBill = false;
+            }
+        );
     }
 }
