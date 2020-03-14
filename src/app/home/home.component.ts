@@ -109,6 +109,8 @@ export class HomeComponent implements OnInit {
                 this.sum.price += x.price;
                 this.sum.value += x.value;
             });
+
+            this.sum.value = Number(this.sum.value.toFixed(2));
         }
     }
 
