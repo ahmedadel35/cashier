@@ -160,9 +160,11 @@ export class HomeComponent implements OnInit {
                     this.loader = false;
                     return false;
                 }
+                this.edit = false;
             },
             err => {
                 this.loader = false;
+                this.edit = false;
                 console.log(err);
             }
         );
@@ -179,9 +181,11 @@ export class HomeComponent implements OnInit {
                     this.doCalc();
                 }
                 this.loader = false;
+                this.edit = false;
             },
             err => {
                 this.loader = false;
+                this.edit = false;
                 console.log(err);
             }
         );
@@ -277,6 +281,7 @@ export class HomeComponent implements OnInit {
 
                     this.doCalc();
                     this.loader = false;
+                    this.edit = false;
                 }
             );
     }
