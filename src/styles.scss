@@ -2,7 +2,6 @@
 
 @import 'assets/css/roboto.scss';
 @import 'assets/css/cairo.scss';
-@import 'assets/css/materialIcons.scss';
 @import 'bootstrap';
 
 html,
@@ -11,14 +10,20 @@ body {
 }
 body {
     margin: 0;
+}
+body,
+mat-toolbar *,
+span,
+div * {
     font-family: 'Cairo', 'Roboto', 'Helvetica Neue', Roboto, sans-serif !important;
 }
+@import 'assets/css/materialIcons.scss';
 .loader {
     z-index: 999;
     transform: translate(-50%, -50%);
     left: 50%;
     top: 50%;
-    border-radius: .5rem !important;
+    border-radius: 0.5rem !important;
 }
 .fillRemaning {
     flex: 1 1 auto;
