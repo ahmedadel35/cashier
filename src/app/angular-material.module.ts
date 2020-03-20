@@ -24,7 +24,11 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import {
+    MatPaginatorModule,
+    MatPaginator,
+    MatPaginatorIntl
+} from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 // import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 // import { MatSliderModule } from '@angular/material/slider';
@@ -41,11 +45,12 @@ import {
 } from '@angular/material/core';
 // import { MatNativeDateModule } from '@angular/material/core';
 // import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { arabicPaginatorIntl } from './matPaginatorIntlArabic';
 
 export const MY_FORMATS = {
     parse: { dateInput: 'dddd D MMMM YYYY' },
     display: {
-        dateInput: 'dddd D MMMM YYYY',
+        dateInput: 'dddd D MMMM YYYY'
         // monthYearLabel: 'MMM YYYY',
         // dateA11yLabel: 'LL',
         // monthYearA11yLabel: 'MMMM YYYY'
@@ -79,7 +84,7 @@ const modules: any[] = [
     MatMenuModule,
     MatDialogModule,
     MatPaginatorModule,
-    MatSortModule,
+    MatSortModule
     // MatProgressSpinnerModule,
     // MatNativeDateModule,
     // MatMomentDateModule,
@@ -94,7 +99,8 @@ const modules: any[] = [
             useClass: MomentDateAdapter,
             deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
         },
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+        {provide: MatPaginatorIntl, useValue: arabicPaginatorIntl()}
     ],
     exports: [...modules]
 })
