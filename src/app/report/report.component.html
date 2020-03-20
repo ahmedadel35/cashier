@@ -34,16 +34,14 @@
         <h4 class="mt-3 p-0 m-0 font-weight-bolder">يرجى الإنتظار</h4>
     </div>
     <div class="row">
-        <div class="col-10">
-            <mat-form-field>
-                <mat-label>بحث</mat-label>
-                <input
-                    matInput
-                    (keyup)="applyFilter($event)"
-                    placeholder=" النوع او الصنف او التاريخ"
-                />
-            </mat-form-field>
-        </div>
+        <mat-form-field class="col-10 mx-auto">
+            <mat-label>بحث</mat-label>
+            <input
+                matInput
+                (keyup)="applyFilter($event)"
+                placeholder=" النوع او الصنف او التاريخ"
+            />
+        </mat-form-field>
     </div>
     <div class="row">
         <div class="col-12">
