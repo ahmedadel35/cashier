@@ -46,6 +46,7 @@ import {
 // import { MatNativeDateModule } from '@angular/material/core';
 // import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { arabicPaginatorIntl } from './matPaginatorIntlArabic';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 export const MY_FORMATS = {
     parse: { dateInput: 'dddd D MMMM YYYY' },
@@ -84,7 +85,8 @@ const modules: any[] = [
     MatMenuModule,
     MatDialogModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatSnackBarModule,
     // MatProgressSpinnerModule,
     // MatNativeDateModule,
     // MatMomentDateModule,
