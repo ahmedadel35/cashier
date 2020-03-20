@@ -10,6 +10,7 @@ import 'moment/locale/ar';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDistroyComponent } from '../components/confirm-distroy/confirm-distroy.component';
 import { element } from 'protractor';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-report',
@@ -18,6 +19,7 @@ import { element } from 'protractor';
 })
 export class ReportComponent implements OnInit {
     private DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+    private ERROR_MESS = 'حدث خطأ غير متوقع ، برجاء إعادة المحاولة لاحقاً';
     public loader = false;
     public data: Bill[] | MatTableDataSource<Bill> = [];
     public oldData: Bill[];
@@ -40,7 +42,11 @@ export class ReportComponent implements OnInit {
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-    constructor(private api: ApiService, private dialog: MatDialog) {}
+    constructor(
+        private api: ApiService,
+        private dialog: MatDialog,
+        private snakeBar: MatSnackBar
+    ) {}
 
     ngOnInit(): void {
         this.getData();
@@ -159,8 +165,33 @@ export class ReportComponent implements OnInit {
 
         deleteDialog.afterClosed().subscribe(r => {
             if (r) {
-                // this.api.delete('')
+                this.loader = true;
+
+                this.api.delete(`bill/${b.id}`).subscribe(
+                    (d: { delete: boolean }) => {
+                        if (d && d.delete) {
+                            this.oldData = this.oldData.filter(
+                                x => x.id !== b.id
+                            );
+
+                            this.updateTable(this.oldData);
+                        } else {
+                            this.showSnakeBar(this.ERROR_MESS);
+                        }
+                        this.loader = false;
+                    },
+                    err => {
+                        this.showSnakeBar(this.ERROR_MESS);
+                        this.loader = false;
+                    }
+                );
             }
+        });
+    }
+
+    private showSnakeBar(mess: string) {
+        this.snakeBar.open(mess, null, {
+            duration: 2000
         });
     }
 }
