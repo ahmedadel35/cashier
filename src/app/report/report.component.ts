@@ -39,7 +39,11 @@ export class ReportComponent implements OnInit {
 
         this.api.get('bill').subscribe(
             (r: Bill[]) => {
-                console.log(r);
+                r = r.map(x => {
+                    x.date = this.formatDate(x.created_at);
+                    return x;
+                });
+                // console.log(r);
                 this.data = new MatTableDataSource(r);
 
                 (this.data as MatTableDataSource<Bill>).filterPredicate = (
