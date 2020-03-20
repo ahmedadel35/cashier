@@ -24,6 +24,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 // import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 // import { MatSliderModule } from '@angular/material/slider';
 // import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -76,6 +78,8 @@ const modules: any[] = [
     MatTableModule,
     MatMenuModule,
     MatDialogModule,
+    MatPaginatorModule,
+    MatSortModule,
     // MatProgressSpinnerModule,
     // MatNativeDateModule,
     // MatMomentDateModule,
