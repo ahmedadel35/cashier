@@ -72,7 +72,7 @@
             </a>
         </mat-nav-list>
         <mat-list class="inline brands col-3 pt-0 pr-0 pl-0">
-            <a mat-list-item class="bg-primary" *ngFor="let b of brandData">
+            <a mat-list-item *ngFor="let b of brandData">
                 {{ b.name }}
                 <mat-button-toggle-group
                     #heatr="matButtonToggleGroup"
