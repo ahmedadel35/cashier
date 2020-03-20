@@ -2,3 +2,14 @@ table,
 tr {
     text-align: right;
 }
+table {
+    .mat-header-row {
+        background-color: #3f51b5;
+        th {
+            color: #fff
+        }
+    }
+    tr:nth-child(even) {
+        background-color: #eee;
+    }
+}
