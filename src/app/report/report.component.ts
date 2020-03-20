@@ -9,7 +9,6 @@ import { Moment } from 'moment';
 import 'moment/locale/ar';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDistroyComponent } from '../components/confirm-distroy/confirm-distroy.component';
-import { element } from 'protractor';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -20,6 +19,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class ReportComponent implements OnInit {
     private DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
     private ERROR_MESS = 'حدث خطأ غير متوقع ، برجاء إعادة المحاولة لاحقاً';
+    private SUCCESS_DEL_MESS = 'تمت الإزالة بنجاح';
+
     public loader = false;
     public data: Bill[] | MatTableDataSource<Bill> = [];
     public oldData: Bill[];
@@ -175,6 +176,7 @@ export class ReportComponent implements OnInit {
                             );
 
                             this.updateTable(this.oldData);
+                            this.showSnakeBar(this.SUCCESS_DEL_MESS, false);
                         } else {
                             this.showSnakeBar(this.ERROR_MESS);
                         }
@@ -189,9 +191,14 @@ export class ReportComponent implements OnInit {
         });
     }
 
-    private showSnakeBar(mess: string) {
+    private showSnakeBar(mess: string, isError: boolean = true) {
         this.snakeBar.open(mess, null, {
-            duration: 2000
+            duration: 2500,
+            panelClass: [
+                isError ? 'bg-danger' : 'bg-success',
+                'text-center',
+                'font-weight-bolder'
+            ]
         });
     }
 }
