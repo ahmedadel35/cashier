@@ -1,3 +1,5 @@
+import { Type } from './type';
+import { Brand } from './brand';
 export interface Bill {
     id?: number;
     typeId: number;
@@ -9,4 +11,6 @@ export interface Bill {
     date?: string;
     created_at?: string;
     updated_at?: string;
+    type?: Type;
+    brand?: Brand;
 }

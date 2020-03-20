@@ -4,6 +4,9 @@ import { Bill } from '../interfaces/bill';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { isString } from 'util';
+import { Type } from '../interfaces/type';
+import moment = require('moment');
 
 @Component({
     selector: 'app-report',
@@ -20,6 +23,7 @@ export class ReportComponent implements OnInit {
         'quantity',
         'price',
         'value',
+        'created_at',
         'id'
     ];
 
@@ -39,6 +43,12 @@ export class ReportComponent implements OnInit {
             (r: Bill[]) => {
                 console.log(r);
                 this.data = new MatTableDataSource(r);
+
+                (this.data as MatTableDataSource<Bill>).filterPredicate = (
+                    bill: Bill,
+                    str: string
+                ) => this.customFilter(bill, str);
+
                 this.data.paginator = this.paginator;
                 this.data.sort = this.sort;
                 this.loader = false;
@@ -54,12 +64,23 @@ export class ReportComponent implements OnInit {
         return st === 'hot' ? 'ساخن' : 'بارد';
     }
 
+    customFilter(bill: Bill, str: string) {
+        const type = bill.type.name.trim().toLowerCase();
+        const brand = bill.brand.name.trim().toLowerCase();
+        const date = bill.created_at.trim().toLowerCase();
+
+        return type.indexOf(str) > -1 || brand.indexOf(str) > -1 || date.indexOf(str) > -1;
+    }
+
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
+        // console.log(filterValue);
         this.data.filter = filterValue.trim().toLowerCase();
 
         if ((this.data as MatTableDataSource<Bill>).paginator) {
             (this.data as MatTableDataSource<Bill>).paginator.firstPage();
         }
     }
+
+    
 }
