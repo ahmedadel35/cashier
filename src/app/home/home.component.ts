@@ -6,6 +6,7 @@ import { Bill } from '../interfaces/bill';
 import { MatDialog } from '@angular/material/dialog';
 import { AddnewComponent } from '../components/addnew/addnew.component';
 import * as moment from 'moment';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-home',
@@ -13,6 +14,7 @@ import * as moment from 'moment';
     styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+    private ERROR_MESS = 'حدث خطأ غير متوقع ، برجاء إعادة المحاولة لاحقاً';
     public loader = false;
     public data: Type[] = [];
     public brandData: Brand[] = [];
@@ -33,7 +35,6 @@ export class HomeComponent implements OnInit {
     public editBill = false;
     public activeBillIndex?: number = null;
     public isSavingBill = false;
-    public showAlert = false;
 
     // form props
     public date: any;
@@ -42,7 +43,11 @@ export class HomeComponent implements OnInit {
 
     @ViewChild('amountEl') amountEl: ElementRef;
 
-    constructor(private api: ApiService, public dialog: MatDialog) {}
+    constructor(
+        private api: ApiService,
+        public dialog: MatDialog,
+        private snakeBar: MatSnackBar
+    ) {}
 
     ngOnInit(): void {
         this.date = moment();
@@ -324,16 +329,15 @@ export class HomeComponent implements OnInit {
                     this.bills = [];
 
                     // show alert that saving was success
-                    this.showAlert = true;
-
-                    setTimeout(() => {
-                        this.showAlert = false;
-                    }, 2500);
+                    this.showFeedback('تم الحفظ بنجاح');
+                } else {
+                    this.showFeedback(this.ERROR_MESS, true);
                 }
                 this.isSavingBill = false;
             },
             err => {
-                console.log(err);
+                // console.log(err);
+                this.showFeedback(this.ERROR_MESS, true);
                 this.isSavingBill = false;
             }
         );
@@ -349,5 +353,16 @@ export class HomeComponent implements OnInit {
         this.bills.splice(inx, 1);
 
         this.showSum();
+    }
+
+    private showFeedback(mess: string, isError: boolean = false) {
+        this.snakeBar.open(mess, null, {
+            duration: 2500,
+            panelClass: [
+                isError ? 'bg-danger' : 'bg-success',
+                'text-center',
+                'font-weight-bolder'
+            ]
+        });
     }
 }
