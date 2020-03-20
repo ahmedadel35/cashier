@@ -16,6 +16,7 @@ import { ReportComponent } from './report/report.component';
 import { ConfirmDistroyComponent } from './components/confirm-distroy/confirm-distroy.component';
 
 import {NgxPrintModule} from 'ngx-print';
+import { PrintBillComponent } from './components/print-bill/print-bill.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import {NgxPrintModule} from 'ngx-print';
     HomeComponent,
     AddnewComponent,
     ReportComponent,
-    ConfirmDistroyComponent
+    ConfirmDistroyComponent,
+    PrintBillComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +39,8 @@ import {NgxPrintModule} from 'ngx-print';
   ],
   entryComponents: [
     AddnewComponent,
-    ConfirmDistroyComponent
+    ConfirmDistroyComponent,
+    PrintBillComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
