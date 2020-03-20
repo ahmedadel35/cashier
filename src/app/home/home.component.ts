@@ -336,4 +336,16 @@ export class HomeComponent implements OnInit {
             }
         );
     }
+
+    deleteOrStopEditing(inx: number): void {
+        if (this.editBill && this.activeBillIndex === inx) {
+            this.editBill = false;
+            return;
+        }
+
+        // it`s a delete bill action
+        this.bills.splice(inx, 1);
+
+        this.showSum();
+    }
 }
