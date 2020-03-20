@@ -7,6 +7,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import 'moment/locale/ar';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDistroyComponent } from '../components/confirm-distroy/confirm-distroy.component';
+import { element } from 'protractor';
 
 @Component({
     selector: 'app-report',
@@ -37,7 +40,7 @@ export class ReportComponent implements OnInit {
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-    constructor(private api: ApiService) {}
+    constructor(private api: ApiService, private dialog: MatDialog) {}
 
     ngOnInit(): void {
         this.getData();
@@ -146,5 +149,18 @@ export class ReportComponent implements OnInit {
 
         this.data.paginator = this.paginator;
         this.data.sort = this.sort;
+    }
+
+    removeBill(b: Bill) {
+        const deleteDialog = this.dialog.open(ConfirmDistroyComponent, {
+            // width: '250px',
+            disableClose: true
+        });
+
+        deleteDialog.afterClosed().subscribe(r => {
+            if (r) {
+                // this.api.delete('')
+            }
+        });
     }
 }

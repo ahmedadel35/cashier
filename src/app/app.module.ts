@@ -13,13 +13,15 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { AddnewComponent } from './components/addnew/addnew.component';
 import { ReportComponent } from './report/report.component';
+import { ConfirmDistroyComponent } from './components/confirm-distroy/confirm-distroy.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     AddnewComponent,
-    ReportComponent
+    ReportComponent,
+    ConfirmDistroyComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +33,8 @@ import { ReportComponent } from './report/report.component';
     AngularMaterialModule
   ],
   entryComponents: [
-    AddnewComponent
+    AddnewComponent,
+    ConfirmDistroyComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
