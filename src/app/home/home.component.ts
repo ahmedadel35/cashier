@@ -73,6 +73,8 @@ export class HomeComponent implements OnInit {
     }
 
     setHeat(h, brand: Brand) {
+        this.editBill = false;
+
         if (this.edit) {
             return;
         }
