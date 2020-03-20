@@ -15,6 +15,8 @@ import { AddnewComponent } from './components/addnew/addnew.component';
 import { ReportComponent } from './report/report.component';
 import { ConfirmDistroyComponent } from './components/confirm-distroy/confirm-distroy.component';
 
+import {NgxPrintModule} from 'ngx-print';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,7 +32,8 @@ import { ConfirmDistroyComponent } from './components/confirm-distroy/confirm-di
     FormsModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    NgxPrintModule,
   ],
   entryComponents: [
     AddnewComponent,
