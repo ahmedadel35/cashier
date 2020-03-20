@@ -5,6 +5,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import * as moment from 'moment';
+import { Moment } from 'moment';
+import 'moment/locale/ar';
 
 @Component({
     selector: 'app-report',
@@ -12,8 +14,15 @@ import * as moment from 'moment';
     styleUrls: ['./report.component.scss']
 })
 export class ReportComponent implements OnInit {
+    private DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
     public loader = false;
     public data: Bill[] | MatTableDataSource<Bill> = [];
+    public oldData: Bill[];
+    public toDate: Moment | Date;
+    public fromDate: Moment | Date;
+    public minDate: Moment;
+    public maxDate: Moment;
+    public currentDate: Moment;
     public displayedColumns: string[] = [
         'typeId',
         'brandId',
@@ -21,7 +30,7 @@ export class ReportComponent implements OnInit {
         'quantity',
         'price',
         'value',
-        'created_at',
+        'updated_at',
         'id'
     ];
 
@@ -32,6 +41,7 @@ export class ReportComponent implements OnInit {
 
     ngOnInit(): void {
         this.getData();
+        // this.minDate = new Date();
     }
 
     getData() {
@@ -40,19 +50,13 @@ export class ReportComponent implements OnInit {
         this.api.get('bill').subscribe(
             (r: Bill[]) => {
                 r = r.map(x => {
-                    x.date = this.formatDate(x.created_at);
+                    x.date = this.formatDate(x.updated_at);
                     return x;
                 });
-                // console.log(r);
-                this.data = new MatTableDataSource(r);
 
-                (this.data as MatTableDataSource<Bill>).filterPredicate = (
-                    bill: Bill,
-                    str: string
-                ) => this.customFilter(bill, str);
+                this.oldData = [...r];
 
-                this.data.paginator = this.paginator;
-                this.data.sort = this.sort;
+                this.updateTable(r);
                 this.loader = false;
             },
             err => {
@@ -89,9 +93,58 @@ export class ReportComponent implements OnInit {
     }
 
     formatDate(date: string): string {
-        const d = moment(date, 'YYYY-MM-DD HH:mm:ss');
-        moment.locale('ar-dz');
+        const d = moment(date, this.DATE_FORMAT);
+        moment.locale('ar-eg');
 
         return d.format('dddd DD MMMM YYYY [،] hh:mm a');
+    }
+
+    filterByDate() {
+        this.loader = true;
+
+        const newData = this.oldData.filter(x =>
+            moment(x.updated_at).isBetween(
+                this.fromDate,
+                this.toDate,
+                null,
+                '[]'
+            )
+        );
+
+        this.updateTable(newData);
+        this.loader = false;
+    }
+
+    removeDateFilter() {
+        this.loader = true;
+
+        this.updateTable(this.oldData);
+
+        this.loader = false;
+    }
+
+    private updateTable(datasource: Bill[]) {
+        // set minimum date and date value to oldest bill date
+        const oldestDate = moment(this.oldData[0].updated_at, this.DATE_FORMAT);
+        this.minDate = oldestDate;
+        this.fromDate = oldestDate;
+
+        // set maximum date and toDate to last bill date
+        const maximumDate = moment(
+            this.oldData[this.oldData.length - 1].updated_at,
+            this.DATE_FORMAT
+        );
+        this.maxDate = maximumDate;
+        this.toDate = maximumDate;
+
+        this.data = new MatTableDataSource(datasource);
+
+        (this.data as MatTableDataSource<Bill>).filterPredicate = (
+            bill: Bill,
+            str: string
+        ) => this.customFilter(bill, str);
+
+        this.data.paginator = this.paginator;
+        this.data.sort = this.sort;
     }
 }

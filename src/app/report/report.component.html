@@ -34,7 +34,7 @@
         <h4 class="mt-3 p-0 m-0 font-weight-bolder">يرجى الإنتظار</h4>
     </div>
     <div class="row">
-        <mat-form-field class="col-10 mx-auto">
+        <mat-form-field class="col-6">
             <mat-label>بحث</mat-label>
             <input
                 matInput
@@ -42,6 +42,60 @@
                 placeholder=" النوع او الصنف او التاريخ"
             />
         </mat-form-field>
+        <div class="col-6">
+            <mat-form-field class="dateShow ml-4">
+                <mat-label>من</mat-label>
+                <input
+                    matInput
+                    [matDatepicker]="fromPicker"
+                    [(ngModel)]="fromDate"
+                    [min]="minDate"
+                    [max]="maxDate"
+                    name="fromDate"
+                    (click)="fromPicker.open()"
+                    readonly
+                />
+                <mat-datepicker-toggle
+                    matSuffix
+                    [for]="fromPicker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #fromPicker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="dateShow">
+                <mat-label>إلى</mat-label>
+                <input
+                    matInput
+                    [matDatepicker]="toPicker"
+                    [(ngModel)]="toDate"
+                    name="toDate"
+                    [min]="minDate"
+                    [max]="maxDate"
+                    (click)="toPicker.open()"
+                    readonly
+                />
+                <mat-datepicker-toggle
+                    matSuffix
+                    [for]="toPicker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #toPicker></mat-datepicker>
+            </mat-form-field>
+            <div class="d-inline mr-3">
+                <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="filterByDate()"
+                >
+                    بحث
+                </button>
+                <button
+                    mat-button
+                    color="warn"
+                    (click)="removeDateFilter()"
+                >
+                    إلغاء
+                </button>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-12">
@@ -94,7 +148,7 @@
                         {{ element.value }}
                     </td>
                 </ng-container>
-                <ng-container matColumnDef="created_at">
+                <ng-container matColumnDef="updated_at">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>
                         التاريخ
                     </th>
