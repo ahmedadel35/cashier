@@ -4,9 +4,7 @@ import { Bill } from '../interfaces/bill';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { isString } from 'util';
-import { Type } from '../interfaces/type';
-import moment = require('moment');
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-report',
@@ -69,7 +67,11 @@ export class ReportComponent implements OnInit {
         const brand = bill.brand.name.trim().toLowerCase();
         const date = bill.created_at.trim().toLowerCase();
 
-        return type.indexOf(str) > -1 || brand.indexOf(str) > -1 || date.indexOf(str) > -1;
+        return (
+            type.indexOf(str) > -1 ||
+            brand.indexOf(str) > -1 ||
+            date.indexOf(str) > -1
+        );
     }
 
     applyFilter(event: Event) {
@@ -82,5 +84,10 @@ export class ReportComponent implements OnInit {
         }
     }
 
-    
+    formatDate(date: string): string {
+        const d = moment(date, 'YYYY-MM-DD HH:mm:ss');
+        moment.locale('ar-dz');
+
+        return d.format('dddd DD MMMM YYYY [،] hh:mm a');
+    }
 }
