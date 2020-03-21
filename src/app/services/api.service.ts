@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
 })
 export class ApiService {
-    public serverPath = 'http://localhost/cx/public/api/';
+    public serverPath = '/cx/public/api/';
 
     constructor(private http: HttpClient) {}
 
