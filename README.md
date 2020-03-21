@@ -12,7 +12,7 @@ an cashier app for a food shop powered by angular 9 and angular material 9
    * angular 9
    * angular material 9
    * Bootstrap 4
-   * Backend : PHP Lumen v5.8
+   * Backend : [PHP_Lumen_v5.8](https://github.com/abo3adel/cashier_backend)
 
 ## Development server
 
@@ -20,4 +20,4 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 ## Further help
 
-[http://ninjacoder.rf.gd/](MyPortfolio)
+[MyPortfolio](http://ninjacoder.rf.gd/)
