@@ -358,9 +358,9 @@ export class HomeComponent implements OnInit {
                         return x;
                     });
 
-                    this.bills = [];
-
                     this.showSum();
+
+                    this.bills = [];
 
                     const printDialogRef = this.dialog.open(
                         PrintBillComponent,
