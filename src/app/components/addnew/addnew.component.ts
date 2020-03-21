@@ -112,8 +112,10 @@ export class AddnewComponent implements OnInit {
     }
 
     close() {
-        this.result.changedTypeId =
-            this.result.oldTypeId !== (this.result.obj as Brand).typeId;
+        if (this.result.obj) {
+            this.result.changedTypeId =
+                this.result.oldTypeId !== (this.result.obj as Brand).typeId;
+        }
         this.dialogRef.close(this.result);
     }
 }

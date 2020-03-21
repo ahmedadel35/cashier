@@ -241,6 +241,11 @@ export class HomeComponent implements OnInit {
                     oldTypeId?: number;
                     changedTypeId?: boolean;
                 }) => {
+                    // exit if it was close dialog action
+                    if (!r.obj) {
+                        return;
+                    }
+
                     this.loader = true;
 
                     // check if it was an update dialog
