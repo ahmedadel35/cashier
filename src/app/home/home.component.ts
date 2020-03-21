@@ -324,54 +324,53 @@ export class HomeComponent implements OnInit {
     saveBill() {
         this.isSavingBill = true;
         const date = moment(this.date).format('dddd DD MMMM YYYY [،] hh:mm a');
-        const bills = [...this.bills];
-        bills.map(x => {
-            x.created_at = this.getBrandName(x.brandId);
-            x.state = this.getState(x.state);
-            return x;
-        });
-        console.log(bills);
-
-        this.showSum();
-
-        const printDialogRef = this.dialog.open(PrintBillComponent, {
-            data: {
-                bills,
-                sum: this.sum.value,
-                date,
-                isBill: true
-            },
-            width: '100%'
-        });
-
-        printDialogRef.afterOpened().subscribe(r => {
-            (document.querySelector(
-                '.cdk-overlay-pane'
-            ) as HTMLDivElement).style.maxWidth = '100%';
-            (document.querySelector(
-                '.cdk-overlay-pane'
-            ) as HTMLDivElement).style.height = '100%';
-        });
-
-        this.isSavingBill = false;
-
-        this.bills = [];
 
         // show alert that saving was success
         // this.showFeedback('تم الحفظ بنجاح');
-
-        return;
         this.api.post('bill', this.bills).subscribe(
             (r: { saved: boolean }) => {
                 if (r && r.saved) {
+                    const bills = [...this.bills];
+                    bills.map(x => {
+                        x.created_at = this.getBrandName(x.brandId);
+                        x.state = this.getState(x.state);
+                        return x;
+                    });
+
                     this.bills = [];
 
-                    // show alert that saving was success
-                    this.showFeedback('تم الحفظ بنجاح');
+                    this.showSum();
+
+                    const printDialogRef = this.dialog.open(
+                        PrintBillComponent,
+                        {
+                            data: {
+                                bills,
+                                sum: this.sum.value,
+                                date,
+                                isBill: true
+                            },
+                            width: '100%',
+                            disableClose: true
+                        }
+                    );
+
+                    printDialogRef.afterOpened().subscribe(res => {
+                        (document.querySelector(
+                            '.cdk-overlay-pane'
+                        ) as HTMLDivElement).style.maxWidth = '100%';
+                        (document.querySelector(
+                            '.cdk-overlay-pane'
+                        ) as HTMLDivElement).style.height = '100%';
+                    });
                 } else {
                     this.showFeedback(this.ERROR_MESS, true);
                 }
                 this.isSavingBill = false;
+                // reset type list
+                this.brandData = [];
+                this.currentTypeId = null;
+                this.amount = this.price = null;
             },
             err => {
                 // console.log(err);

@@ -1,6 +1,6 @@
 <div class="container text-center" id="print-section">
     <div *ngIf="data.isBill">
-        <h1>City Broast</h1>
+        <h1>{{ isCmd ? 'أمر التشغيل' : 'City Broast' }}</h1>
         <h3>{{ data.date }}</h3>
         <table>
             <thead>
@@ -8,8 +8,8 @@
                     <th>إسم الصنف</th>
                     <th>الحالة</th>
                     <th>الكمية</th>
-                    <th>السعر</th>
-                    <th>القيمة</th>
+                    <th [hidden]="isCmd">السعر</th>
+                    <th [hidden]="isCmd">القيمة</th>
                 </tr>
             </thead>
             <tbody>
@@ -17,25 +17,25 @@
                     <td>{{ b.created_at }}</td>
                     <td>{{ b.state }}</td>
                     <td>{{ b.quantity }}</td>
-                    <td>{{ b.price }} ج</td>
-                    <td>{{ b.value }} ج</td>
+                    <td [hidden]="isCmd">{{ b.price }} ج</td>
+                    <td [hidden]="isCmd">{{ b.value }} ج</td>
                 </tr>
             </tbody>
-            <tfoot>
+            <tfoot [hidden]="isCmd">
                 <tr>
                     <th colspan="3">المجموع</th>
                     <th colspan="2">{{ data.sum }} جنيه</th>
                 </tr>
             </tfoot>
         </table>
-        <h3>سعدنا لزيارتكم</h3>
-        <h3>خدمة العملاء: 01515132148</h3>
+        <h3 [hidden]="isCmd">سعدنا لزيارتكم</h3>
+        <h3 [hidden]="isCmd">خدمة العملاء: 01515132148</h3>
     </div>
     <div class="row hide-print mt-4 text-center">
         <h4 class="text-center">هل تمت الطباعة بنجاح</h4>
         <div class="btns">
             <button mat-raised-button color="primary" (click)="printCmd()">
-                إطبع أمر التشغيل
+                {{ isCmd ? 'إغلاق' : 'إطبع أمر التشغيل' }}
             </button>
             <button mat-button color="accent" (click)="printAgain()">
                 إطبع مرة إخرى

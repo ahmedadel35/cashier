@@ -8,6 +8,8 @@ import { Bill } from '../../interfaces/bill';
     styleUrls: ['./print-bill.component.scss']
 })
 export class PrintBillComponent implements AfterContentInit {
+    public isCmd = false;
+
     constructor(
         public dialogRef: MatDialogRef<PrintBillComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any
@@ -21,5 +23,13 @@ export class PrintBillComponent implements AfterContentInit {
         setTimeout(() => window.print(), 200);
     }
 
-    printCmd() {}
+    printCmd() {
+        if (this.isCmd) {
+            this.dialogRef.close();
+            return;
+        }
+
+        this.isCmd = true;
+        setTimeout(() => window.print(), 500);
+    }
 }
