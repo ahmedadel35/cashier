@@ -59,6 +59,15 @@ export class HomeComponent implements OnInit {
         this.loader = true;
         this.api.get('all').subscribe(
             (d: Type[]) => {
+                console.log(d);
+                if (!d.length) {
+                    this.showFeedback(
+                        'لم يتم إضافة أى أصناف ، قم بالبدء بإضافة الأنواع',
+                        true,
+                        4000
+                    );
+                }
+
                 this.allTypes = [...d];
                 this.doCalc(d);
 
