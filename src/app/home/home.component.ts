@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddnewComponent } from '../components/addnew/addnew.component';
 import * as moment from 'moment';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PrintBillComponent } from '../components/print-bill/print-bill.component';
 
 @Component({
     selector: 'app-home',
@@ -110,7 +111,7 @@ export class HomeComponent implements OnInit {
     showSum() {
         this.sum.amount = this.sum.price = this.sum.value = 0;
 
-        if (this.bills.length > 1) {
+        if (this.bills.length) {
             this.bills.forEach((x: Bill) => {
                 this.sum.amount += x.quantity;
                 this.sum.price += x.price;
@@ -322,7 +323,44 @@ export class HomeComponent implements OnInit {
 
     saveBill() {
         this.isSavingBill = true;
+        const date = moment(this.date).format('dddd DD MMMM YYYY [،] hh:mm a');
+        const bills = [...this.bills];
+        bills.map(x => {
+            x.created_at = this.getBrandName(x.brandId);
+            x.state = this.getState(x.state);
+            return x;
+        });
+        console.log(bills);
 
+        this.showSum();
+
+        const printDialogRef = this.dialog.open(PrintBillComponent, {
+            data: {
+                bills,
+                sum: this.sum.value,
+                date,
+                isBill: true
+            },
+            width: '100%'
+        });
+
+        printDialogRef.afterOpened().subscribe(r => {
+            (document.querySelector(
+                '.cdk-overlay-pane'
+            ) as HTMLDivElement).style.maxWidth = '100%';
+            (document.querySelector(
+                '.cdk-overlay-pane'
+            ) as HTMLDivElement).style.height = '100%';
+        });
+
+        this.isSavingBill = false;
+
+        this.bills = [];
+
+        // show alert that saving was success
+        // this.showFeedback('تم الحفظ بنجاح');
+
+        return;
         this.api.post('bill', this.bills).subscribe(
             (r: { saved: boolean }) => {
                 if (r && r.saved) {

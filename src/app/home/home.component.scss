@@ -21,10 +21,16 @@
 }
 .dateShow input {
     background-color: #eee;
-    &:hover{
+    &:hover {
         cursor: pointer !important;
     }
 }
 table .mat-button-toggle-checked {
     border: 5px solid var(--success) !important;
+}
+
+@media print {
+    .hide-print {
+        display: none;
+    }
 }

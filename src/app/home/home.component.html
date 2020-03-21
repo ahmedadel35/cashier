@@ -1,4 +1,4 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" class="hide-print">
     <span>City Broast</span>
 
     <div class="fillRemaning">
@@ -23,9 +23,9 @@
         </a>
     </div>
 </mat-toolbar>
-<div class="container-fluid">
+<div class="container-fluid hide-print">
     <div
-        class="loader position-fixed text-center border border-dark pt-1 px-3 text-light bg-dark"
+        class="loader position-fixed text-center border border-dark pt-1 px-3 text-light bg-dark hide-print"
         [hidden]="!loader"
     >
         <div
@@ -43,7 +43,7 @@
         </div>
         <h4 class="mt-3 p-0 m-0 font-weight-bolder">يرجى الإنتظار</h4>
     </div>
-    <div class="row">
+    <div class="row hide-print">
         <mat-nav-list class="inline types col-3 pt-0 pr-0 pl-0">
             <a
                 mat-list-item
@@ -175,7 +175,7 @@
         </div>
     </div>
     <div class="row mt-3">
-        <div class="mb-2 text-center w-75 mx-auto" [hidden]="!bills.length">
+        <div class="mb-2 text-center w-75 mx-auto hide-print" [hidden]="!bills.length">
             <button
                 mat-flat-button
                 color="primary"
@@ -208,18 +208,18 @@
         >
             <thead>
                 <tr class="bg-primary text-light">
-                    <th>النوع</th>
+                    <th class="hide-print">النوع</th>
                     <th>الصنف</th>
                     <th>الحالة</th>
                     <th>الكمية</th>
                     <th>السعر</th>
                     <th>القيمة</th>
-                    <th>____</th>
+                    <th class="hide-print">____</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let b of bills; let binx = index">
-                    <td>{{ getTypeName(b.typeId) }}</td>
+                    <td class="hide-print">{{ getTypeName(b.typeId) }}</td>
                     <td>{{ getBrandName(b.brandId) }}</td>
                     <td>
                         <span *ngIf="!editBill || activeBillIndex !== binx">{{
@@ -286,7 +286,7 @@
                         </span>
                     </td>
                     <td>{{ b.value }} جنيه</td>
-                    <td>
+                    <td class="hide-print">
                         <button
                             mat-raised-button
                             class="bg-success text-light ml-2"
