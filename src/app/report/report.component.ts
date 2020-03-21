@@ -59,6 +59,12 @@ export class ReportComponent implements OnInit {
 
         this.api.get('bill').subscribe(
             (r: Bill[]) => {
+                if (!r.length) {
+                    this.showSnakeBar('لم يتم تسجيل أى فواتير', true);
+                    this.loader = false;
+                    return;
+                }
+
                 r = r.map(x => {
                     x.date = this.formatDate(x.updated_at);
                     return x;
@@ -134,18 +140,23 @@ export class ReportComponent implements OnInit {
     }
 
     private updateTable(datasource: Bill[]) {
-        // set minimum date and date value to oldest bill date
-        const oldestDate = moment(this.oldData[0].updated_at, this.DATE_FORMAT);
-        this.minDate = oldestDate;
-        this.fromDate = oldestDate;
+        if (datasource.length) {
+            // set minimum date and date value to oldest bill date
+            const oldestDate = moment(
+                this.oldData[0].updated_at,
+                this.DATE_FORMAT
+            );
+            this.minDate = oldestDate;
+            this.fromDate = oldestDate;
 
-        // set maximum date and toDate to last bill date
-        const maximumDate = moment(
-            this.oldData[this.oldData.length - 1].updated_at,
-            this.DATE_FORMAT
-        );
-        this.maxDate = maximumDate;
-        this.toDate = maximumDate;
+            // set maximum date and toDate to last bill date
+            const maximumDate = moment(
+                this.oldData[this.oldData.length - 1].updated_at,
+                this.DATE_FORMAT
+            );
+            this.maxDate = maximumDate;
+            this.toDate = maximumDate;
+        }
 
         this.data = new MatTableDataSource(datasource);
 
