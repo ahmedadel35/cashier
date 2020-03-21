@@ -113,8 +113,8 @@ export class HomeComponent implements OnInit {
             typeId: this.currentTypeId,
             brandId: this.currentBrandId,
             state: this.heat,
-            quantity: f.amount,
-            price: f.price,
+            quantity: f.amount || 0,
+            price: f.price || 0,
             value: Number((f.amount * f.price).toFixed(2))
             // date: f.date
         };
