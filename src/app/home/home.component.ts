@@ -57,12 +57,19 @@ export class HomeComponent implements OnInit {
 
     loadData() {
         this.loader = true;
-        this.api.get('all').subscribe((d: Type[]) => {
-            this.allTypes = [...d];
-            this.doCalc(d);
+        this.api.get('all').subscribe(
+            (d: Type[]) => {
+                this.allTypes = [...d];
+                this.doCalc(d);
 
-            this.loader = false;
-        });
+                this.loader = false;
+            },
+            err => {
+                if (!err.status) {
+                    this.showFeedback('قم بتشغيل برنامج السيرفر', true, 6000);
+                }
+            }
+        );
     }
 
     doCalc(d: Type[] = this.allTypes) {
@@ -392,9 +399,13 @@ export class HomeComponent implements OnInit {
         this.showSum();
     }
 
-    private showFeedback(mess: string, isError: boolean = false) {
+    private showFeedback(
+        mess: string,
+        isError: boolean = false,
+        period: number = 2500
+    ) {
         this.snakeBar.open(mess, null, {
-            duration: 2500,
+            duration: period,
             panelClass: [
                 isError ? 'bg-danger' : 'bg-success',
                 'text-center',
